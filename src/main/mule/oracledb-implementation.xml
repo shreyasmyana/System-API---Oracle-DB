@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:db="http://www.mulesoft.org/schema/mule/db"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/db http://www.mulesoft.org/schema/mule/db/current/mule-db.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="Get_Employee_Data_From_OracleDB_Flow" doc:id="474fedf6-958f-4512-8a98-2fc6463b9a52" >
+		<logger level="INFO" doc:name="Start Logger" doc:id="f9e2c83b-a4f4-427f-9027-e487825c23e9" message="#[payload]"/>
+		<db:select doc:name="Get Employees" doc:id="2f9d990c-3399-414a-ad4c-4a93d4ec2690" config-ref="Database_Config" fetchSize="1000" maxRows="1000">
+			<db:sql ><![CDATA[SELECT emp_id, emp_first_name, emp_last_name, emp_address, emp_salary, emp_dept_name, TO_CHAR(system_timestamp, 'DD-MM-YYYY HH:MM:SS AM' ) as system_timestamp FROM employees]]></db:sql>
+		</db:select>
+		<ee:transform doc:name="JAVA TO JSON" doc:id="551dfe46-99c2-4563-a9a1-7169a74f9b4a" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	employee_id: payload01.EMP_ID,
+	employee_first_name: payload01.EMP_FIRST_NAME,
+	employee_last_name: payload01.EMP_LAST_NAME,
+	employee_address: payload01.EMP_ADDRESS,
+	employee_salary: payload01.EMP_SALARY,
+	employee_dept_name: payload01.EMP_DEPT_NAME,
+	system_timestamp: payload01.SYSTEM_TIMESTAMP
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End Logger" doc:id="f0e3d6a7-ac45-4b85-a10c-9d3aaf7634ed" message="#[payload]"/>
+	</flow>
+</mule>

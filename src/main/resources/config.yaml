@@ -1,0 +1,9 @@
+http:
+  port: "8081"
+
+oracle:
+  host: "localhost"
+  port: "1521"
+  user: "dummy"
+  password: "dummy"
+  servicename: "ORCLCDB.localdomain"

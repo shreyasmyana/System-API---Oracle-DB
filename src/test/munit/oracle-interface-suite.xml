@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd">
+	<munit:config name="oracle-interface-suite.xml" />
+	<munit:test name="oracle-systemapi-main-test" doc:id="01330e15-991f-4b5c-b743-f22ec6bac4a9" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock APIkit Router" doc:id="edabeaa8-79a7-4e8b-a6c0-65024581687f" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="41e2d411-c912-4f29-a4ba-c8abbe590fce" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://oraclesystemapimaintest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://oraclesystemapimaintest\mock_variable_.dwl')]" />
+						<munit-tools:variable key="httpStatus" value="#[readUrl('classpath://oraclesystemapimaintest\mock_variable_1.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="c2d06480-09f8-412c-b5f7-1cd4060371c0" >
+				<munit:payload value="#[readUrl('classpath://oraclesystemapimaintest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://oraclesystemapimaintest\set-event_attributes.dwl')]" />
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to oracle-systemapi-main" doc:id="4f07878b-a47f-4425-bb43-39969a631ee4" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="d93a0b21-14da-4d29-a628-e1b4530269f7" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import oraclesystemapimaintest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="get:\employees:oracle-systemapi-config-test" doc:id="06784749-1540-4ec1-b900-c2e54bcb8130" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Flow Reference" doc:id="1aed6344-ed56-4699-b31e-9353b7c2ae0e" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="342b4804-4bd7-4d56-8860-17940dcf5f57" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/json --- readUrl('classpath://getemployeesoraclesystemapiconfigtest\mock_payload.dwl')]" mediaType="application/json" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://getemployeesoraclesystemapiconfigtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="d2c18fa1-3dae-409e-99f8-f057d778a3a7" >
+				<munit:payload value="#[readUrl('classpath://getemployeesoraclesystemapiconfigtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://getemployeesoraclesystemapiconfigtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://getemployeesoraclesystemapiconfigtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to get:\employees:oracle-systemapi-config" doc:id="4344057b-c95e-4b03-a61b-fe40266abb8a" name="get:\employees:oracle-systemapi-config"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="238b0c77-c2f6-4949-8e34-0d0c38739a9a" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import getemployeesoraclesystemapiconfigtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+		</munit:validation>
+	</munit:test>
+
+<munit:test name="Get_Employee_Data_From_OracleDB_Flow-test-1" doc:id="8ee54ae3-e55f-4a99-8efd-bee588981a98" >
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock Get Employees" doc:id="74a34bb6-f0a8-4fe3-8510-d2978e961c7f" processor="db:select">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="2f9d990c-3399-414a-ad4c-4a93d4ec2690" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:payload value="#[output application/java --- readUrl('classpath://GetEmployeeDataFromOracleDBFlowtest\mock_payload.dwl')]" mediaType="application/java" encoding="UTF-8" />
+					<munit-tools:variables >
+						<munit-tools:variable key="outboundHeaders" value="#[readUrl('classpath://GetEmployeeDataFromOracleDBFlowtest\mock_variable_.dwl')]" />
+					</munit-tools:variables>
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+			<munit:set-event doc:name="Set Input" doc:id="036b5a51-f17b-4069-8f77-f49ee7c492ac" >
+				<munit:payload value="#[readUrl('classpath://GetEmployeeDataFromOracleDBFlowtest\set-event_payload.dwl')]" encoding="UTF-8" />
+				<munit:attributes value="#[readUrl('classpath://GetEmployeeDataFromOracleDBFlowtest\set-event_attributes.dwl')]" />
+				<munit:variables >
+					<munit:variable key="outboundHeaders" value="#[readUrl('classpath://GetEmployeeDataFromOracleDBFlowtest\set-event_variable_.dwl')]" />
+				</munit:variables>
+			</munit:set-event>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow-ref to Get_Employee_Data_From_OracleDB_Flow" doc:id="7c3de5f2-f0d5-4d84-8aa1-8014b02c9a78" name="Get_Employee_Data_From_OracleDB_Flow"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert doc:name="Assert payload" doc:id="48ac38a6-cd99-4d7c-9d78-33f9df333f74" message="The payload does not match">
+				<munit-tools:that ><![CDATA[#[%dw 2.0
+import GetEmployeeDataFromOracleDBFlowtest::assert_expression_payload
+---
+assert_expression_payload::main({payload: payload, attributes: attributes, vars: vars})]]]></munit-tools:that>
+			</munit-tools:assert>
+			<munit-tools:verify-call doc:name="Verify JAVA TO JSON" doc:id="28bb1b72-fcef-4a5e-9582-c577c2c2a527" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="551dfe46-99c2-4563-a9a1-7169a74f9b4a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="oracle-interface-suiteTest-BADREQUEST" doc:id="fff6bee8-cccd-4bd5-9b34-1318bbdf1ac6" description="Test" expectedErrorType="APIKIT:BAD_REQUEST">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT BAD REQUEST" doc:id="5169989f-8813-4f3c-aa9c-e0a9df0711bc" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="oracle-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:BAD_REQUEST" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="a052863e-636c-44d1-a1eb-ae8e1869db3e" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="2b6d49a4-a331-43c5-9b7c-2392400d960d" actual="#[vars.httpStatus]" expected="#[400]"/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="oracle-interface-suiteTest-NOTFOUND" doc:id="f8ce4e47-0606-49d5-a423-c09781995f21" description="Test" expectedErrorType="APIKIT:NOT_FOUND">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT NOT FOUND" doc:id="23976d35-6d3a-460b-bb61-3dfd4e51bde0" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="oracle-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_FOUND" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="48d77bd5-3795-458a-b888-555b19640948" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="282b9d6a-cdc0-4956-bce2-e1decec4c892" actual="#[vars.httpStatus]" expected='#[{message: "Resource not found"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="oracle-interface-suiteTest-MTDNOTALLWD" doc:id="cad0eddd-c7fc-486e-997d-25ce8c56571e" description="Test" expectedErrorType="APIKIT:METHOD_NOT_ALLOWED">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT MTD NOT ALLWD" doc:id="3faba1ae-5592-4282-a970-5818d923fa4b" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="oracle-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:METHOD_NOT_ALLOWED" />
+				</munit-tools:then-return>
+			
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="745727f2-1632-492b-874d-f4f3a1194995" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="576a833b-cb8e-4fb3-b334-e09657102b02" actual="#[vars.httpStatus]" expected='#[{message: "Method not allowed"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="oracle-interface-suiteTest-NOTACCEPTABLE" doc:id="bc240a69-cc2c-4a15-9f9b-2d15fd4a628d" description="Test" expectedErrorType="APIKIT:NOT_ACCEPTABLE">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT MTD NOT ALLWD" doc:id="44df2105-d1b7-4575-8ec8-6a7d6e3eb810" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="oracle-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:NOT_ACCEPTABLE" />
+				</munit-tools:then-return>
+			
+
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="d876e7da-d89d-4089-ab60-f866d191dc79" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="55fad002-cc70-48c6-8fd1-304cff5c6331" actual="#[vars.httpStatus]" expected='#[{message: "Not acceptable"}]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="oracle-interface-suiteTest-UNSUPPORTEDMEDIATYPE" doc:id="5b872219-965f-4bcd-a371-cf044413abb5" description="Test" expectedErrorType="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when APIKIT MTD NOT ALLWD" doc:id="ac7c50cf-6c2d-4309-a8f6-5a3f50b2ce4a" processor="apikit:router">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="oracle-systemapi-config" attributeName="config-ref" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APIKIT:UNSUPPORTED_MEDIA_TYPE" />
+				</munit-tools:then-return>
+			
+
+</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<flow-ref doc:name="Flow Reference" doc:id="4110ec86-dcb6-4533-a84b-e7692c0d1aee" name="oracle-systemapi-main"/>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="37293e6b-d85c-425c-99c6-93f324dd9618" actual="#[vars.httpStatus]" expected='#[{message: "Unsupported media type"}]'/>
+		</munit:validation>
+	</munit:test>
+</mule>
